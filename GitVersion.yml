@@ -1,0 +1,31 @@
+mode: ContinuousDelivery
+
+commit-message-incrementing: MergeMessageOnly
+
+major-version-bump-message: '(?i)(^feat!|^breaking change:)'
+minor-version-bump-message: '(?i)^feat(\(.+\))?:'
+patch-version-bump-message: '(?i)^fix(\(.+\))?:'
+
+branches:
+  main:
+    regex: ^main$
+    label: ''
+    increment: Inherit
+
+  develop:
+    regex: ^develop$
+    label: beta
+    increment: Inherit
+
+  release:
+    regex: ^releases?[/-]
+    label: rc
+    increment: Inherit
+
+  feature:
+    regex: ^features?[/-]
+    label: alpha
+    increment: Inherit
+
+ignore:
+  sha: []
