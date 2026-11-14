@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/JQuants.Net/JQuants.Net.csproj" />
+  <Project Path="tests/JQuants.Net.UnitTests/JQuants.Net.UnitTests.csproj" Id="ba9a6f47-6125-42f5-a348-10f9beaf17de" />
+</Solution>
