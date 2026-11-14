@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../../src/JQuants.Net/JQuants.Net.csproj" />
+  <Project Path="JQuants.Net.ConsoleSample.csproj" />
+</Solution>
