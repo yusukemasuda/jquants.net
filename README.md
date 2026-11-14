@@ -3,15 +3,13 @@ A modern .NET client library for the J-Quants API with rate limiting and async s
 
 ## Features
 
-- Supports the J-Quants API.
-- Built on `HttpClientFactory`.
-- Automatic rate limiting.
-- Asynchronous API access.
-- Pagination is handled internally.
-- Dependency Injection support.
-- Compatible with `netstandard2.0`.
-
----
+- Supports the J-Quants API
+- Built on `HttpClientFactory`
+- Automatic rate limiting
+- Asynchronous API access
+- Internal pagination handling
+- Dependency Injection support
+- Compatible with `netstandard2.0`
 
 ## Installation
 
@@ -27,22 +25,9 @@ or
 dotnet add package JQuants.Net
 ```
 
----
+## Quick Start
 
-## Configuration
-
-Configure the API key during service registration.
-
-```csharp
-services.AddJQuantsNet(options =>
-{
-    options.ApiKey = "<YOUR_API_KEY>";
-});
-```
-
----
-
-## Dependency Injection
+### Configure Services
 
 ```csharp
 var services = new ServiceCollection();
@@ -52,103 +37,66 @@ services.AddJQuantsNet(options =>
     options.ApiKey = "<YOUR_API_KEY>";
 });
 
-var serviceProvider =
-    services.BuildServiceProvider();
+var serviceProvider = services.BuildServiceProvider();
 ```
 
----
-
-## Getting Started
-
-Resolve `IJQuantsApi` from the service provider.
+### Resolve API Client
 
 ```csharp
-var api =
-    serviceProvider.GetRequiredService<IJQuantsApi>();
+var api = serviceProvider.GetRequiredService<IJQuantsApi>();
 ```
 
----
-
-## Get Listed Issues
-
-Retrieve listed issues from the equities master endpoint.
+### Get Listed Issues
 
 ```csharp
-var request =
-    new GetListedIssuesRequest
-    {
-        Date = new DateTime(2026, 1, 1)
-    };
-
-await foreach (var issue in api.Equities.GetListedIssuesAsync(
-                   request,
-                   CancellationToken.None))
+var request = new GetListedIssuesRequest
 {
-    Console.WriteLine(
-        $"{issue.Code} {issue.CoName}");
+    Date = new DateTime(2026, 1, 1)
+};
+
+await foreach (var issue in api.Equities.GetListedIssuesAsync(request, CancellationToken.None))
+{
+    Console.WriteLine($"{issue.Code} {issue.CoName}");
 }
 ```
 
----
-
-## Filter by Code
+### Filter by Code
 
 ```csharp
-var request =
-    new GetListedIssuesRequest
-    {
-        Code = "86970"
-    };
-
-await foreach (var issue in api.Equities.GetListedIssuesAsync(
-                   request,
-                   CancellationToken.None))
+var request = new GetListedIssuesRequest
 {
-    Console.WriteLine(
-        $"{issue.Code} {issue.CoName}");
+    Code = "86970"
+};
+
+await foreach (var issue in api.Equities.GetListedIssuesAsync(request, CancellationToken.None))
+{
+    Console.WriteLine($"{issue.Code} {issue.CoName}");
 }
 ```
 
----
+## Usage
 
-## Cancellation
-
-The library supports cancellation through `CancellationToken`.
+### Cancellation
 
 ```csharp
-using var cancellationTokenSource =
-    new CancellationTokenSource();
+using var cancellationTokenSource = new CancellationTokenSource();
 
-cancellationTokenSource.CancelAfter(
-    TimeSpan.FromSeconds(5));
+cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(5));
 
-await foreach (var issue in api.Equities.GetListedIssuesAsync(
-                   new GetListedIssuesRequest(),
-                   cancellationTokenSource.Token))
+await foreach (var issue in api.Equities.GetListedIssuesAsync(new GetListedIssuesRequest(), cancellationTokenSource.Token))
 {
     Console.WriteLine(issue.Code);
 }
 ```
 
----
-
-## Rate Limiting
-
-Requests are automatically throttled based on the configured rate limit.
-
-No additional configuration is required.
-
----
-
-## Error Handling
+### Error Handling
 
 ```csharp
 try
 {
-    await foreach (var issue in api.Equities.GetListedIssuesAsync(
-                       new GetListedIssuesRequest(),
-                       CancellationToken.None))
+    await foreach (var issue in api.Equities.GetListedIssuesAsync(new GetListedIssuesRequest(), CancellationToken.None))
     {
+        ....
     }
 }
 catch (OperationCanceledException)
@@ -161,7 +109,11 @@ catch (HttpRequestException ex)
 }
 ```
 
----
+### Rate Limiting
+
+Requests are automatically throttled according to the configured rate limit.
+
+No additional configuration is required.
 
 ## Supported Frameworks
 
@@ -169,10 +121,16 @@ catch (HttpRequestException ex)
 netstandard2.0
 ```
 
----
+## Documentation
+
+Detailed project documentation is available in the `docs` directory.
+
+### Development
+
+- [Branching Strategy](docs/branching-strategy.md)
 
 ## License
 
 Licensed under the Apache License, Version 2.0.
 
-See the LICENSE file for details.
+See [LICENSE](LICENSE) and [NOTICE](NOTICE) for details.
