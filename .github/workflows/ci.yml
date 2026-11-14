@@ -1,5 +1,9 @@
 name: CI
 
+env:
+  LINE_COVERAGE_THRESHOLD: 80
+  BRANCH_COVERAGE_THRESHOLD: 70
+
 on:
   push:
     branches:
@@ -14,25 +18,106 @@ on:
 jobs:
   build:
 
-    name: Build and Test
+    name: Build, Test and Coverage
 
     runs-on: ubuntu-latest
 
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 10.0.x
 
       - name: Restore
-        run: dotnet restore
+        run: |
+          dotnet restore
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: |
+          dotnet build \
+            --configuration Release \
+            --no-restore
 
       - name: Test
-        run: dotnet test --configuration Release --no-build
+        run: |
+          dotnet test \
+            --configuration Release \
+            --no-build \
+            --collect:"XPlat Code Coverage"
+
+      - name: Install ReportGenerator
+        run: |
+          dotnet tool install \
+            --global dotnet-reportgenerator-globaltool
+
+      - name: Generate Coverage Report
+        run: |
+          reportgenerator \
+            -reports:**/coverage.cobertura.xml \
+            -targetdir:coveragereport \
+            "-reporttypes:Html;MarkdownSummary"
+
+      - name: Validate Coverage
+        shell: pwsh
+        run: |
+          $hasError = $false
+
+          $coverageFiles = Get-ChildItem -Filter coverage.cobertura.xml -Recurse
+          if ($coverageFiles.Count -eq 0)
+          {
+              Write-Error "No coverage.cobertura.xml files found."
+              exit 1
+          }
+
+          foreach ($file in $coverageFiles)
+          {
+              Write-Host "Coverage file: $($file.FullName)"
+              [xml]$coverage = Get-Content $file.FullName
+
+              $lineRate = [math]::Round([double]$coverage.coverage.'line-rate' * 100, 2)
+              $branchRate = [math]::Round([double]$coverage.coverage.'branch-rate' * 100, 2)
+
+              Write-Host "Line Coverage   : $lineRate%"
+              Write-Host "Branch Coverage : $branchRate%"
+
+              if ($lineRate -lt $env:LINE_COVERAGE_THRESHOLD)
+              {
+                  Write-Error(
+                    "Line coverage threshold not met. " +
+                    "Required: $env:LINE_COVERAGE_THRESHOLD%, " +
+                    "Actual: $lineRate%, " +
+                    "File: $($file.FullName)")
+
+                  $hasError = $true
+              }
+
+              if ($branchRate -lt $env:BRANCH_COVERAGE_THRESHOLD)
+              {
+                  Write-Error(
+                    "Branch coverage threshold not met. " +
+                    "Required: $env:BRANCH_COVERAGE_THRESHOLD%, " +
+                    "Actual: $branchRate%, " +
+                    "File: $($file.FullName)")
+
+                  $hasError = $true
+              }
+          }
+
+          if ($hasError)
+          {
+              exit 1
+          }
+
+          Write-Host "Coverage validation passed."
+
+      - name: Upload Coverage Report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-report
+          path: coveragereport
+          if-no-files-found: ignore
