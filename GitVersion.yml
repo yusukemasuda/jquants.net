@@ -1,0 +1,36 @@
+# Initial version used by GitVersion when no version tag exists yet.
+# Once the first release tag (v0.1.0) is created, GitVersion will use
+# the tag history as the version source.
+next-version: 0.1.0
+
+mode: ContinuousDelivery
+
+commit-message-incrementing: MergeMessageOnly
+
+major-version-bump-message: '(?i)(^feat!|^breaking change:)'
+minor-version-bump-message: '(?i)^feat(\(.+\))?:'
+patch-version-bump-message: '(?i)^fix(\(.+\))?:'
+
+branches:
+  main:
+    regex: ^main$
+    label: ''
+    increment: Patch
+
+  develop:
+    regex: ^develop$
+    label: beta
+    increment: Patch
+
+  release:
+    regex: ^releases?[/-]
+    label: rc
+    increment: Patch
+
+  feature:
+    regex: ^features?[/-]
+    label: alpha
+    increment: Patch
+
+ignore:
+  sha: []
