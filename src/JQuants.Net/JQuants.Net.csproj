@@ -5,6 +5,21 @@
     <LangVersion>8.0</LangVersion>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
+    <PropertyGroup>
+    <Description>A modern .NET client library for the J-Quants API with rate limiting and async streaming support.</Description>
+    <Authors>Yusuke Masuda</Authors>
+    <PackageProjectUrl>https://github.com/yusukemasuda/jquants.net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/yusukemasuda/jquants.net</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageTags>jquants;japan;stocks;finance;investment;api</PackageTags>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageReadmeFile>README.nuget.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="../../README.nuget.md" Pack="true" PackagePath="\" />
+</ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
