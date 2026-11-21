@@ -1,6 +1,7 @@
 ﻿using JQuants.Net.Abstractions.Interfaces;
 using JQuants.Net.DependencyInjection;
 using JQuants.Net.Infrastructure.Http;
+using JQuants.Net.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JQuants.Net.UnitTests.DependencyInjection
@@ -15,7 +16,7 @@ namespace JQuants.Net.UnitTests.DependencyInjection
 
             services.AddJQuantsNet(options =>
             {
-                options.ApiKey = "test-api-key";
+                options.ApiPlan = ApiPlans.Free("test-api-key");
             });
 
             var serviceProvider = services.BuildServiceProvider();
@@ -35,7 +36,7 @@ namespace JQuants.Net.UnitTests.DependencyInjection
 
             services.AddJQuantsNet(options =>
             {
-                options.ApiKey = "test-api-key";
+                options.ApiPlan = ApiPlans.Free("test-api-key");
             });
 
             var serviceProvider = services.BuildServiceProvider();
@@ -55,7 +56,7 @@ namespace JQuants.Net.UnitTests.DependencyInjection
 
             services.AddJQuantsNet(options =>
             {
-                options.ApiKey = "test-api-key";
+                options.ApiPlan = ApiPlans.Free("test-api-key");
             });
 
             var serviceProvider = services.BuildServiceProvider();

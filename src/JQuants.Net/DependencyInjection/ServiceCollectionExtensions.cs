@@ -46,6 +46,11 @@ namespace JQuants.Net.DependencyInjection
 
             configure(options);
 
+            if (options.ApiPlan is null)
+            {
+                throw new InvalidOperationException($"{nameof(options.ApiPlan)} must be configured");
+            }
+
             services.AddSingleton(options);
 
             services.AddSingleton<IClock, SystemClock>();
@@ -56,7 +61,7 @@ namespace JQuants.Net.DependencyInjection
                 new JQuantsRateLimiter(
                     serviceProvider.GetRequiredService<IClock>(),
                     serviceProvider.GetRequiredService<IDelayProvider>(),
-                    options.RequestsPerMinute));
+                    options.ApiPlan.RequestsPerMinute));
 
             services.AddHttpClient<IJQuantsHttpClient, JQuantsHttpClient>();
 
@@ -67,17 +72,6 @@ namespace JQuants.Net.DependencyInjection
             services.AddTransient<IJQuantsApi, JQuantsApi>();
 
             return services;
-        }
-
-        public static IServiceCollection AddJQuantsNet(
-            this IServiceCollection services)
-        {
-            if (services == null)
-            {
-                throw new ArgumentNullException(nameof(services));
-            }
-
-            return services.AddJQuantsNet((option) => { });
         }
     }
 }

@@ -2,7 +2,7 @@
 using JQuants.Net.Abstractions.Interfaces;
 using JQuants.Net.Abstractions.Requests;
 using JQuants.Net.DependencyInjection;
-
+using JQuants.Net.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,7 +22,7 @@ internal static class Program
 
         services.AddJQuantsNet(options =>
         {
-            options.ApiKey = configuration["JQuants:ApiKey"];
+            options.ApiPlan = ApiPlans.Free(configuration["JQuants:ApiKey"]);
         });
 
         var serviceProvider = services.BuildServiceProvider();

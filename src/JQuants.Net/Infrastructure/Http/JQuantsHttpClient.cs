@@ -27,9 +27,7 @@ namespace JQuants.Net.Infrastructure.Http
             httpClient.BaseAddress =
                 new Uri("https://api.jquants.com");
 
-            httpClient.DefaultRequestHeaders.Add(
-                "x-api-key",
-                options.ApiKey);
+            httpClient.DefaultRequestHeaders.Add("x-api-key", options.ApiPlan.ApiKey);
         }
 
         public Task<HttpResponseMessage> GetAsync(
