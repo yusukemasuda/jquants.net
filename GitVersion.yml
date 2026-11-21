@@ -9,7 +9,7 @@ commit-message-incrementing: MergeMessageOnly
 
 major-version-bump-message: '(?i)(^feat!|^breaking change:)'
 minor-version-bump-message: '(?i)^feat(\(.+\))?:'
-patch-version-bump-message: '(?i)^fix(\(.+\))?:'
+patch-version-bump-message: '(?i)^(fix|build|chore|ci|docs|style|refactor|perf|test)(\(.+\))?:'
 
 branches:
   main:
