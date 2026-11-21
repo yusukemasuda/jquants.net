@@ -53,6 +53,11 @@ jobs:
       - name: Display Version
         run: |
           echo "Version now building: ${{ steps.gitversion.outputs.semVer }}"
+          echo "majorMinorPatch=${{ steps.gitversion.outputs.majorMinorPatch }}"
+          echo "semVer=${{ steps.gitversion.outputs.semVer }}"
+          echo "fullSemVer=${{ steps.gitversion.outputs.fullSemVer }}"
+          echo "nuGetVersion=${{ steps.gitversion.outputs.nuGetVersion }}"
+          echo "nuGetVersionV2=${{ steps.gitversion.outputs.nuGetVersionV2 }}"
 
       - name: Restore
         run: |
